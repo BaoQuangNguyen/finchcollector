@@ -1,19 +1,27 @@
 from django.shortcuts import render
-
+from django.views.generic.edit import CreateView
+from .models import Finch
 # Create your views here.
 
-finchs = [
-    {'name': 'Pheobe', 'breed': 'House finch', 'description': 'Kind of annoying', 'age': 4},
-    {'name': 'Sasha', 'breed': 'Hawfinch', 'description': 'Actually annoying', 'age': 1},
-    {'name': 'Jamie', 'breed': 'Brambling', 'description': 'The sweetest', 'age': 2},
-    {'name': 'Julie', 'breed': 'Atlantic canary', 'description': 'Super rude', 'age': 3},
-]
 
 def home(request):
     return render(request, 'home.html')
+
 def about(request):
     return render(request, 'about.html')
+
 def finchs_index(request):
+    finchs = Finch.objects.all()
     return render(request, 'finchs/index.html', {
         'finchs': finchs
     })
+
+def finchs_detail(request, finch_id):
+    finch = Finch.objects.get(id=finch_id)
+    return render(request, 'finchs/detail.html', {
+        'finch': finch
+    })
+
+class FinchCreate(CreateView):
+    model = Finch
+    fields = '__all__'
